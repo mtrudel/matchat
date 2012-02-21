@@ -56,6 +56,7 @@ If not, getting one [is easy](https://api.heroku.com/signup)).
 5. Deploy your app, scale up your bot worker, and scale down your web worker
    (to stay within Heroku's free tier)
 
+        git push heroku master
         heroku ps:scale web=0 bot=1
 
 6. Anyone listed in `BOOTSTRAP_BUDDIES` will be allowed to connect to the
