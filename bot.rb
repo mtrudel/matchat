@@ -28,13 +28,6 @@ before :message do |s|
   halt unless @members.keys.include? s.from.stripped.to_s
 end
 
-message :body => /^\/eval (.+)$/ do |m|
-  from = m.from.stripped.to_s
-  code = /^\/eval (.+)$/.match(m.body)[1]
-  send_to from, eval(code)
-  halt
-end
-
 message :body => /^\/nick (.+)$/ do |m|
   from = m.from.stripped.to_s
   nick = /^\/nick (.+)$/.match(m.body)[1]
