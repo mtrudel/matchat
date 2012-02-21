@@ -35,18 +35,18 @@ message :body => /^\/eval (.+)$/ do |m|
   halt
 end
 
-message :body => /^\/nick (\w+)$/ do |m|
+message :body => /^\/nick (.+)$/ do |m|
   from = m.from.stripped.to_s
-  nick = /^\/nick (\w+)$/.match(m.body)[1]
+  nick = /^\/nick (.+)$/.match(m.body)[1]
   puts "#{from} changing nickname to #{nick}"
   send_to @members.keys, "#{from} changing nickname to #{nick}"
   @members[from][:nickname] = nick
   halt
 end
 
-message :body => /^\/snooze (\d+[hmd])$/ do |m|
+message :body => /^\/snooze (.+)$/ do |m|
   from = m.from.stripped.to_s
-  duration = ChronicDuration.parse /^\/snooze (\d+[hmd])$/.match(m.body)[1]
+  duration = ChronicDuration.parse /^\/snooze (.+)$/.match(m.body)[1]
   puts "#{from} sleeping for #{ChronicDuration.output duration}"
   send_to from, "Sleeping for #{ChronicDuration.output duration}"
   @members[from][:dnduntil] = Time.now + duration
