@@ -53,7 +53,7 @@ This part is easy.
 5. Deploy your app, scale up your bot worker, and scale down your web worker
    (to stay within Heroku's free tier)
 
-       heroku ps:scale web=0 bot=1
+        heroku ps:scale web=0 bot=1
 
 6. Anyone listed in `BOOTSTRAP_BUDDIES` will be allowed to connect to the
    chatroom simply by adding the Jabber user you created in step 1 to their
