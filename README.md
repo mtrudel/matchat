@@ -30,20 +30,22 @@ This part is easy.
 
 3. Create a heroku app to host it in
 
-        heroku app:create <yournamehere> --stack cedar
+        heroku apps:create --stack cedar
 
 4. Specify the credentials of your user from step 1
 
-        heroku config:add JABBER_USERNAME=foo@bar.com JABBER_PASSWORD=sekrit
-        JABBER_HOSTNAME=jabber.bar.com BOOTSTRAP_BUDDIES="you@yourself.com
-        someoneelse@them.com"
+        heroku config:add \
+          JABBER_USERNAME=mychatroom@gmail.com \
+          JABBER_PASSWORD=sekrit\
+          JABBER_HOSTNAME=talk.google.com \
+          BOOTSTRAP_BUDDIES="you@yourself.com someoneelse@them.com"
 
     If you're using a gmail account, `JABBER_HOSTNAME` will be
     `talk.google.com`. Otherwise it will be the name of your Jabber host
     (MatChat isn't smart enough to walk DNS SRV records, so you actually have to
     specify this if it differs from the domain part of the username).
 
-    The purpose of the `BOOTSTRAP_BUDDIES` is to define the set of people
+    The purpose of `BOOTSTRAP_BUDDIES` is to define the set of people
     able to connect to the chatroom. Only people listed here will be able to add the
     chatroom account to their roster and communicate through it. The list
     should be a set of Jabber IDs, space separated.
