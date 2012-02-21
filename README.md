@@ -19,7 +19,8 @@ MatChat is the simplest thing that can pass as a multi-user chatroom.
 
 ## Installing it
 
-This part is easy. 
+This part is easy (these instructions assume you already have a Heroku account.
+If not, getting one [is easy](https://api.heroku.com/signup)).
 
 1. Create a Jabber account somewhere for this room to use. This can be as
    simple as creating a new gmail user.
@@ -27,8 +28,10 @@ This part is easy.
 2. Clone this repo
 
         git clone git@github.com/mtrudel/matchat
+        cd matchat
 
-3. Create a heroku app to host it in
+3. Create a heroku app to host it in (the name of the app doesn't matter, so
+   just leave it blank unless you have a better name for it)
 
         heroku apps:create --stack cedar
 
@@ -36,7 +39,7 @@ This part is easy.
 
         heroku config:add \
           JABBER_USERNAME=mychatroom@gmail.com \
-          JABBER_PASSWORD=sekrit\
+          JABBER_PASSWORD=sekrit \
           JABBER_HOSTNAME=talk.google.com \
           BOOTSTRAP_BUDDIES="you@yourself.com someoneelse@them.com"
 
