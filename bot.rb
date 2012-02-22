@@ -28,6 +28,13 @@ before :message do |s|
   halt unless @members.keys.include? s.from.stripped.to_s
 end
 
+
+message :body => /^\/roster$/ do |m|
+  result = my_roster.reduce('') { |str, item| str += "#{item.name} (#{item.jid}) #{item.status} #{item.subscription}\n" }
+  write_to_stream result
+  halt
+end
+
 message :body => /^\/nick (.+)$/ do |m|
   from = m.from.stripped.to_s
   nick = /^\/nick (.+)$/.match(m.body)[1]
