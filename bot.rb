@@ -6,18 +6,20 @@ setup ENV['JABBER_JID'], ENV['JABBER_PASSWORD'], ENV['JABBER_HOST']
 @members = Hash[ENV['BOOTSTRAP_BUDDIES'].split.map {|x| [x, {}]}]
 
 def send_to(dests, msg)
-  dests = [dests] unless dests.is_a? Array
+  dests = [dests] unless dests.respond_to? :each
   dests.each do |dest|
-    next if (Time.now <=> @members[dest][:dnduntil]) == -1
+    dest = dest.jid || dest
+    next if (Time.now <=> @members[dest.stripped.to_s][:dnduntil]) == -1
     say dest, msg
   end
 end
 
 # Auto approve subscription requests from members
 subscription :request? do |s|
+  puts "Joinging #{s.from}"
   from = s.from.stripped.to_s
   if @members.keys.include? from
-    send_to @members.keys, "#{from} just joined the room"
+    send_to my_roster, "#{from} just joined the room"
     write_to_stream s.approve!
   else
     write_to_stream s.refuse!
@@ -25,44 +27,50 @@ subscription :request? do |s|
 end
 
 before :message do |s|
-  halt unless @members.keys.include? s.from.stripped.to_s
+  halt unless my_roster[s.from]
 end
 
 message :error? do |s|
   puts "We got an error of #{s}"
+  halt
 end
 
 message :body => /^\/roster$/ do |m|
   result = my_roster.reduce('') { |str, item| str += "#{item.name} (#{item.jid}) #{item.status} #{item.subscription}\n" }
-  write_to_stream result
+  send_to m.from, result
+  halt
+end
+
+message :body => /^\/leave$/ do |m|
+  my_roster.delete m.from
+  write_to_stream Blather::Stanza::Presence::Subscription.new(m.from, :unsubscribed)
+  send_to m.from, "You have left this room. You'll need to re-add this #{jid.stripped} to join again. Bye bye"
   halt
 end
 
 message :body => /^\/nick (.+)$/ do |m|
-  from = m.from.stripped.to_s
   nick = /^\/nick (.+)$/.match(m.body)[1]
-  puts "#{from} changing nickname to #{nick}"
-  send_to @members.keys, "#{from} changing nickname to #{nick}"
-  @members[from][:nickname] = nick
+  puts "#{m.from.stripped} changing nickname to #{nick}"
+  send_to my_roster, "#{m.from.stripped} changing nickname to #{nick}"
+  my_roster[m.from].name = nick
+  write_to_stream my_roster[m.from].to_stanza(:set)
   halt
 end
 
 message :body => /^\/snooze (.+)$/ do |m|
-  from = m.from.stripped.to_s
   duration = ChronicDuration.parse /^\/snooze (.+)$/.match(m.body)[1]
-  puts "#{from} sleeping for #{ChronicDuration.output duration}"
-  send_to from, "Sleeping for #{ChronicDuration.output duration}"
-  @members[from][:dnduntil] = Time.now + duration
+  puts "#{m.from.stripped} sleeping for #{ChronicDuration.output duration}"
+  send_to m.from, "Sleeping for #{ChronicDuration.output duration}"
+  @members[m.from.stripped.to_s][:dnduntil] = Time.now + duration
   halt
 end
 
 # Reflect messages out to everyone except the person who sent them
 message :chat?, :body do |m|
-  from = m.from.stripped.to_s
-  @members[from][:dnduntil] = nil
-  puts "#{from} sending message #{m.body}"
-  nick = @members[from][:nickname] || from
-  send_to @members.keys.reject { |k,v| k == from }, "[#{nick}] #{m.body}"
+  @members[m.from.stripped.to_s][:dnduntil] = nil
+  puts "#{m.from.stripped} sending message #{m.body}"
+  nick = my_roster[m.from].name || my_roster[m.from].jid.stripped
+  send_to my_roster.reject { |i| i.jid.stripped == m.from.stripped }, "[#{nick}] #{m.body}"
   halt
 end
 
