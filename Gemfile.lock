@@ -1,3 +1,14 @@
+GIT
+  remote: git://github.com/mtrudel/blather.git
+  revision: 379eca5d8c2652abb3b9d42c151330e4c50dea9f
+  branch: fix-rosterlist-items
+  specs:
+    blather (0.5.12)
+      activesupport (>= 3.0.7)
+      eventmachine (>= 0.12.6)
+      niceogiri (>= 0.1.0)
+      nokogiri (~> 1.4.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -5,11 +16,6 @@ GEM
       i18n (~> 0.6)
       multi_json (~> 1.0)
     addressable (2.2.7)
-    blather (0.5.12)
-      activesupport (>= 3.0.7)
-      eventmachine (>= 0.12.6)
-      niceogiri (>= 0.1.0)
-      nokogiri (~> 1.4.0)
     chronic_duration (0.9.6)
       numerizer (~> 0.1.1)
     eventmachine (0.12.10)
@@ -40,7 +46,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  blather
+  blather!
   chronic_duration
   foreman
   heroku
