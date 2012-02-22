@@ -28,6 +28,9 @@ before :message do |s|
   halt unless @members.keys.include? s.from.stripped.to_s
 end
 
+message :error? do |s|
+  puts "We got an error of #{s}"
+end
 
 message :body => /^\/roster$/ do |m|
   result = my_roster.reduce('') { |str, item| str += "#{item.name} (#{item.jid}) #{item.status} #{item.subscription}\n" }
