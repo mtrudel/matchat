@@ -60,6 +60,7 @@ message :chat?, :body do |m|
   puts "#{from} sending message #{m.body}"
   nick = @members[from][:nickname] || from
   send_to @members.keys.reject { |k,v| k == from }, "[#{nick}] #{m.body}"
+  halt
 end
 
 when_ready { puts "Connected! Send messages to #{jid.stripped}" }
