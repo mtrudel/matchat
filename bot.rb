@@ -17,7 +17,7 @@ end
 subscription :request? do |s|
   from = s.from.stripped.to_s
   if @members.keys.include? from
-    send_to @members.keys, "#{from} just joined the room", :type => :headline
+    send_to @members.keys, "#{from} just joined the room"
     write_to_stream s.approve!
   else
     write_to_stream s.refuse!
