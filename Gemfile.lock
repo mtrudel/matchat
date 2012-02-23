@@ -1,7 +1,7 @@
 GIT
   remote: git://github.com/mtrudel/blather.git
-  revision: 379eca5d8c2652abb3b9d42c151330e4c50dea9f
-  branch: fix-rosterlist-items
+  revision: 98666766a651a5f76f359de166490799dfa02931
+  branch: develop
   specs:
     blather (0.5.12)
       activesupport (>= 3.0.7)
