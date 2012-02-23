@@ -42,9 +42,8 @@ message :body => /^\/roster$/ do |m|
 end
 
 message :body => /^\/leave$/ do |m|
-  my_roster.delete m.from
-  write_to_stream Blather::Stanza::Presence::Subscription.new(m.from, :unsubscribed)
   send_to m.from, "You have left this room. You'll need to re-add this #{jid.stripped} to join again. Bye bye"
+  my_roster.delete m.from
   halt
 end
 
