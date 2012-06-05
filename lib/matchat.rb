@@ -20,6 +20,10 @@ message :error? do |s|
   halt
 end
 
+message :body => /^\/(nick|alias) (.+)$/ do |m|
+  set_nick_for m.from, /^\/(nick|alias) (.+)$/.match(m.body)[2]
+end
+
 message :chat?, :body do |m|
   forward_to_room m
 end

@@ -1,5 +1,9 @@
+require File.join(File.dirname(__FILE__), %w(room nick))
+
 module Matchat
   module Room
+    include Nick
+
     def initialize_room(members)
       if members.is_a? Array
         @members = Hash[members.map {|x| [x, {}]}]
@@ -9,20 +13,30 @@ module Matchat
     end
 
     def forward_to_room(msg)
-      body = "[#{msg.from.stripped.to_s}] #{msg.body}"
+      body = "[#{nick_for(msg.from)}] #{msg.body}"
       members_except(msg.from).each do |dest|
         say dest, body
+      end
+    end
+
+    def send_to_room(msg)
+      members.each do |dest|
+        say dest, msg
       end
     end
 
     private
 
     def members
-      @members || {}
+      @members.keys || []
     end
 
     def members_except(jid)
-      members.keys.reject { |x| x == jid.stripped.to_s }
+      members.reject { |x| x == key(jid) }
+    end
+
+    def key(jid)
+      Blather::JID.new(jid).stripped.to_s
     end
   end
 end
