@@ -1,24 +1,14 @@
+require File.join(File.dirname(__FILE__), %w(.. membership_list))
+
 module Matchat
   module Room
     module Membership
       def initialize_room(members)
-        if members.is_a? Array
-          @members = Hash[members.map {|x| [x, {}]}]
-        else
-          @members = members || {}
-        end
+        @members = Matchat::MembershipList.new(members)
       end
 
       def members
-        @members.keys || []
-      end
-
-      def members_except(jid)
-        members.reject { |x| x == key(jid) }
-      end
-
-      def key(jid)
-        Blather::JID.new(jid).stripped.to_s
+        @members
       end
     end
   end

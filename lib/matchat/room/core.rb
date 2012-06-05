@@ -3,7 +3,7 @@ module Matchat
     module Core
       def forward_to_room(msg)
         body = "[#{nick_for(msg.from)}] #{msg.body}"
-        members_except(msg.from).each do |dest|
+        members.except(msg.from).each do |dest|
           say dest, body
         end
       end
