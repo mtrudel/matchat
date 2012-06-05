@@ -15,6 +15,11 @@ subscription :request? do |s|
   write_to_stream s.approve!
 end
 
+message :error? do |s|
+  puts "We got an error of #{s}"
+  halt
+end
+
 message :chat?, :body do |m|
   forward_to_room m
 end
