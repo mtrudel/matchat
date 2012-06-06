@@ -1,14 +1,16 @@
+before_broadcast_filter do |m|
+  m.body = "[#{nick m.from}] #{m.body}"
+end
+
 module Matchat
   module Room
     module Nick
-      def nick_for(jid)
+      def nick(jid)
         members[jid][:nick] || jid.node
       end
 
-      def set_nick_for(jid, nick)
-        old_nick = nick_for jid
+      def set_nick(jid, nick)
         members[jid][:nick] = nick
-        send_to_room "#{old_nick} changed their nickname to #{nick}"
       end
     end
   end
