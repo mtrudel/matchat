@@ -1,3 +1,4 @@
+require 'chronic_duration'
 
 # Load up the blather DSL
 require 'blather/client'
@@ -11,6 +12,9 @@ include Matchat::Room::Membership
 
 require File.join(File.dirname(__FILE__), %w(matchat room nick))
 include Matchat::Room::Nick
+
+require File.join(File.dirname(__FILE__), %w(matchat room snooze))
+include Matchat::Room::Snooze
 
 setup ENV['JABBER_JID'], ENV['JABBER_PASSWORD'], ENV['JABBER_HOST']
 
@@ -33,6 +37,13 @@ message :body => /^\/(nick|alias) (.+)$/ do |m|
   set_nick m.from, nick
   send_to members, "#{old_nick} changed their nick to #{nick}"
   halt
+end
+
+message :body => /^\/(snooze|sleep) (.+)$/ do |m|
+  duration = ChronicDuration.parse /^\/(snooze|sleep) (.+)$/.match(m.body)[2]
+  send_to m.from, "Sleeping for #{ChronicDuration.output duration}"
+  send_to members.except(m.from), "#{nick(m.from)} sleeping for #{ChronicDuration.output duration}"
+  snooze m.from, duration
 end
 
 message :chat?, :body do |m|

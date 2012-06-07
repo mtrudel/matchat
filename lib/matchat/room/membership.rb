@@ -4,7 +4,7 @@ module Matchat
   module Room
     module Membership
       def initialize_room(members)
-        @members = Matchat::MembershipList.new(members)
+        @members = MembershipList.new members
       end
 
       def members

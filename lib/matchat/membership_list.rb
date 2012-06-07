@@ -1,36 +1,35 @@
 require 'rubygems'
 require 'blather/jid'
 
+def keyify(jid)
+  Blather::JID.new(jid).stripped.to_s
+end
+
 module Matchat
-  class MembershipList
-    include Enumerable
+  class MembershipList < Hash
 
-    def initialize(members)
-      if members.is_a? Array
-        @members = Hash[members.map {|x| [key(x), {}]}]
+    def initialize(vals)
+      case vals
+      when Array
+        super
+        vals.each { |x| self[x] = {} }
+      else
+        super(vals)
       end
     end
 
-    def [](member)
-      @members[key(member)]
+    def [](key)
+      super(keyify(key))
     end
 
-    def []=(key,val)
-      @members[key(key)] = val
+    def []=(key, val)
+      super(keyify(key), val)
     end
 
-    def each
-      @members.keys.each do |jid|
-        yield jid
-      end
-    end
-
-    def except(jid)
-      @members.keys.reject { |x| x == key(jid) }
-    end
-
-    def key(jid)
-      Blather::JID.new(jid).stripped.to_s
+    def except(key)
+      result = dup
+      result.delete(keyify(key))
+      result
     end
   end
 end
