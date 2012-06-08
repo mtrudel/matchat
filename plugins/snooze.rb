@@ -17,8 +17,8 @@ before_broadcast_filter do |m|
   m.dest = m.dest.reject { |x| snoozing? x }
 end
 
-message :body => /^\/(snooze|sleep) (.+)$/ do |m|
-  duration = ChronicDuration.parse /^\/(snooze|sleep) (.+)$/.match(m.body)[2]
+message :body => /^\/(?:snooze|sleep) (.+)$/ do |m|
+  duration = ChronicDuration.parse /^\/(?:snooze|sleep) (.+)$/.match(m.body)[1]
   send_to m.from, "Sleeping for #{ChronicDuration.output duration}"
   send_to members.except(m.from), "#{nick(m.from)} sleeping for #{ChronicDuration.output duration}"
   snooze m.from, duration
