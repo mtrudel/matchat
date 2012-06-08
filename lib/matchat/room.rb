@@ -25,13 +25,13 @@ module Matchat
 
       # Finally, register our default broadcast handler
       message :chat?, :body do |m|
-        message = Struct.new(:from, :body, :dest).new(m.from, m.body, members)
+        message = Struct.new(:from, :body, :xhtml_body, :dest).new(m.from, m.body, m.body, members)
 
         before_filters.each do |f|
           f.call message
         end
 
-        send_to message.dest.except(message.from), message.body
+        send_to message.dest.except(message.from), message.body, message.xhtml_body
       end
 
       # Now that we're all set up, start the client

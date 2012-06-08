@@ -8,7 +8,7 @@ module Matchat
       end
     end
 
-    def send_to(dest, msg)
+    def send_to(dest, body, xhtml = nil)
       case dest
       when Hash
         dest = dest.keys
@@ -19,7 +19,10 @@ module Matchat
       end
 
       dest.each do |d|
-        say d, msg
+        m = Blather::Stanza::Message.new(d)
+        m.body = body
+        m.xhtml = xhtml unless xhtml.nil?
+        write_to_stream m
       end
     end
 

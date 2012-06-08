@@ -5,3 +5,4 @@ gem 'heroku'
 
 gem 'blather'
 gem 'chronic_duration'
+gem 'video_info'
