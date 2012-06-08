@@ -1,9 +1,13 @@
+require 'uri'
 require 'video_info'
+require 'chronic_duration'
 
 before_broadcast_filter do |m|
-  regex = /(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S)*/
-  if matches = regex.match(m.xhtml_body)
-    info = VideoInfo.new(matches[0])
-    m.xhtml_body.gsub!(regex, "<a href=\"http://youtube.com/watch?v=#{matches[1]}\">Video: #{info.title}</a>")
+  URI.extract(m.body).each do |url|
+    if (info = VideoInfo.new(url)).valid?
+      duration = ChronicDuration.output(info.duration, :format => :chrono)
+      m.body.gsub!(url, "#{url} (#{info.title} #{duration})")
+      m.xhtml_body.gsub!(url, "<a href=\"#{url}\">Video: #{info.title} (#{duration})</a>")
+    end
   end
 end
