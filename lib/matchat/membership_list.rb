@@ -1,4 +1,3 @@
-require 'rubygems'
 require 'blather/jid'
 
 def keyify(jid)
@@ -7,14 +6,14 @@ end
 
 module Matchat
   class MembershipList < Hash
-
     def initialize(vals)
       case vals
       when Array
-        super
+        super()
         vals.each { |x| self[x] = {} }
       else
-        super(vals)
+        super()
+        self.merge(vals)
       end
     end
 
