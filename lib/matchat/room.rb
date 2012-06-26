@@ -32,7 +32,16 @@ module Matchat
         message = Struct.new(:from, :body, :xhtml_body, :dest).new(m.from, m.body, m.body, members)
 
         before_filters.each do |f|
-          f.call message
+          begin
+            f.call message
+          rescue StandardError => e
+            send_to message.from, <<-EOF
+              Message processing raised exception #{e.message}
+
+              #{e.backtrace.join("\n")}
+            EOF
+            halt
+          end
         end
 
         send_to message.dest.except(message.from), message.body, message.xhtml_body
