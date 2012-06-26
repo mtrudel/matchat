@@ -31,6 +31,7 @@ GEM
       nokogiri (~> 1.4.6)
     nokogiri (1.4.7)
     numerizer (0.1.1)
+    rdiscount (1.6.8)
     rest-client (1.6.7)
       mime-types (>= 1.16)
     rubyzip (0.9.6.1)
@@ -47,4 +48,5 @@ DEPENDENCIES
   chronic_duration
   foreman
   heroku
+  rdiscount
   video_info
