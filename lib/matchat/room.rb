@@ -23,6 +23,10 @@ module Matchat
       # Notify us when we succesfully connect
       when_ready { puts "Connected! Send messages to #{jid.stripped}." }
 
+      before :message do |s|
+        halt if members[s.from].nil?
+      end
+
       # Finally, register our default broadcast handler
       message :chat?, :body do |m|
         message = Struct.new(:from, :body, :xhtml_body, :dest).new(m.from, m.body, m.body, members)
