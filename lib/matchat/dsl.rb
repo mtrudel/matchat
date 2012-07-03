@@ -19,6 +19,7 @@ module Matchat
       end
 
       dest.each do |d|
+        next unless my_roster[d]
         m = Blather::Stanza::Message.new(d)
         m.body = body
         m.xhtml = xhtml unless xhtml.nil?
