@@ -1,6 +1,6 @@
 before_broadcast_filter do |m|
   # Filter anyone out who's ignoring the sending user
-  m.dest = m.dest.reject { |x| members[x][:ignores] || members[x][:ignores].include?(m.from) }
+  m.dest = m.dest.reject { |x| members[x][:ignores] && members[x][:ignores].include?(m.from) }
 end
 
 message :body => /^\/fuckoff (.+)$/ do |m|
