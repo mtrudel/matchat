@@ -12,6 +12,8 @@ group :test do
   gem 'pry-doc'
   gem 'rspec'
   gem 'shoulda-matchers'
+  gem 'guard-rspec'
+  gem 'rb-fsevent'
 end
 
 gem 'foreman'
