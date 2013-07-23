@@ -50,6 +50,8 @@ describe Matchat::Bot do
     end
 
     it 'should return the correct room' do
+      Matchat::Room.should_receive(:new).once
+      subject.room.should == @room
       subject.room.should == @room
     end
   end

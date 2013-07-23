@@ -30,7 +30,7 @@ module Matchat
     end
 
     def room
-      @room || Room.new
+      @room ||= Room.new
     end
   end
 end
