@@ -1,3 +1,3 @@
-require File.join(File.dirname(__FILE__), *%w(lib matchat bot))
+require_relative 'lib/matchat/bot'
 
 Matchat::Bot.new.run
