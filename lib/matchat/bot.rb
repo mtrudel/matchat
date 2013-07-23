@@ -1,11 +1,15 @@
 require 'blather/client/dsl'
 require_relative 'room'
+require_relative 'blather_delivery'
 
 module Matchat
   class Bot
     include Blather::DSL
 
     def run
+      room.extend(BlatherDelivery)
+      room.client = client
+
       setup username, password, host
 
       when_ready { puts "Connected! Send messages to #{jid.stripped}" }

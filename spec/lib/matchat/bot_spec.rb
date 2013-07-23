@@ -34,6 +34,18 @@ describe Matchat::Bot do
       subject.stub(:message) { |&arg| arg.call 'message' }
       subject.run
     end
+
+    it 'should extend the with the correct delivery methods' do
+      subject.run
+      @room.kind_of?(Matchat::BlatherDelivery).should == true
+    end
+
+    it 'should setup the room delivery client' do
+      client = double 'client'
+      subject.stub(:client) { client }
+      @room.should_receive(:client=).with(client)
+      subject.run
+    end
   end
 
   describe 'attribute readers' do
