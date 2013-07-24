@@ -1,1 +1,2 @@
-bot: bundle exec ruby ./lib/matchat.rb
+web: bundle exec rackup -p $PORT
+bot: bundle exec ruby bot.rb
